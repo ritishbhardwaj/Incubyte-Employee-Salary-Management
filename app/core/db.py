@@ -1,4 +1,6 @@
+import socket
 from collections.abc import Generator
+from urllib.parse import urlparse
 
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.engine import Engine
@@ -6,6 +8,8 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.core.config import get_settings
+
+CONNECT_TIMEOUT_SECONDS = 15
 
 REQUIRED_TABLES = ("users", "sessions", "employees", "compensation_records")
 
@@ -22,6 +26,34 @@ def normalize_database_url(url: str) -> str:
     return url
 
 
+def prefer_ipv4_hostaddr(hostname: str) -> str | None:
+    """Use an A record when one exists.
+
+    Neon publishes AAAA records. On Windows, IPv6 routes to those addresses often
+    black-hole, so libpq sits on each IPv6 attempt before falling back to IPv4.
+    Passing hostaddr (IPv4) keeps TLS SNI on the original hostname.
+    """
+    try:
+        infos = socket.getaddrinfo(hostname, 5432, family=socket.AF_INET, type=socket.SOCK_STREAM)
+    except OSError:
+        return None
+    if not infos:
+        return None
+    return infos[0][4][0]
+
+
+def postgres_connect_args(url: str, *, ssl_require: bool) -> dict:
+    args: dict = {"connect_timeout": CONNECT_TIMEOUT_SECONDS}
+    if ssl_require or "neon.tech" in url:
+        args["sslmode"] = "require"
+    hostname = urlparse(url).hostname
+    if hostname:
+        hostaddr = prefer_ipv4_hostaddr(hostname)
+        if hostaddr:
+            args["hostaddr"] = hostaddr
+    return args
+
+
 def build_engine(
     url: str, *, ssl_require: bool = False, pool_size: int = 5, max_overflow: int = 0
 ) -> Engine:
@@ -33,15 +65,12 @@ def build_engine(
             kwargs["poolclass"] = StaticPool
         return create_engine(url, **kwargs)
 
-    connect_args: dict = {}
-    if ssl_require or "neon.tech" in url:
-        connect_args["sslmode"] = "require"
     return create_engine(
         url,
         pool_size=pool_size,
         max_overflow=max_overflow,
         pool_pre_ping=True,
-        connect_args=connect_args,
+        connect_args=postgres_connect_args(url, ssl_require=ssl_require),
     )
 
 
