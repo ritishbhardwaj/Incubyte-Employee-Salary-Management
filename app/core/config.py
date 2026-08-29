@@ -10,7 +10,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    database_url: str = "postgresql://neondb_owner:npg_PY0lvmdeAX9L@ep-damp-night-b23fmitc-pooler.c-6.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+    database_url: str = "postgresql://user:password@localhost:5432/incubyteesm"
     database_ssl_require: bool = True
     db_pool_size: int = 5
     db_max_overflow: int = 0
