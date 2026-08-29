@@ -1,1 +1,4 @@
+# Gitignore excludes frontend/dist. Cloud must still upload the built SPA
+# so app.frontend("/") can serve it as the site homepage.
 !frontend/dist/
+!frontend/dist/**

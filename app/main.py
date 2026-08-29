@@ -72,9 +72,12 @@ def _include_routers(application: FastAPI) -> None:
 
 
 def _mount_frontend(application: FastAPI) -> None:
-    if not FRONTEND_DIST.exists():
-        return
-    application.frontend("/", directory=str(FRONTEND_DIST), fallback="index.html")
+    application.frontend(
+        "/",
+        directory=str(FRONTEND_DIST),
+        fallback="index.html",
+        check_dir="auto",
+    )
 
 
 app = create_app()
