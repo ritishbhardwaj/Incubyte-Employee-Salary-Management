@@ -8,6 +8,7 @@ from app.auth.service import utcnow
 from app.compensation.models import CompensationRecord
 from app.compensation.service import create_initial_compensation, list_compensation_history
 from app.core.exceptions import ConflictError, NotFoundError, ValidationAppError
+from app.core.org import EMPLOYEE_CODE_PREFIX, format_employee_code
 from app.core.pagination import clamp_page, offset_for
 from app.employees.models import JOB_LEVELS, Employee, EmploymentStatus
 from app.employees.schemas import EmployeeCreate, EmployeePatch
@@ -29,14 +30,16 @@ def _validate_level(job_level: str) -> str:
 
 def _next_employee_code(db: Session) -> str:
     codes = db.scalars(
-        select(Employee.employee_code).where(Employee.employee_code.like("ACME-%"))
+        select(Employee.employee_code).where(
+            Employee.employee_code.like(f"{EMPLOYEE_CODE_PREFIX}-%")
+        )
     ).all()
     highest = 0
     for code in codes:
         suffix = code.split("-", 1)[-1]
         if suffix.isdigit():
             highest = max(highest, int(suffix))
-    return f"ACME-{highest + 1:05d}"
+    return format_employee_code(highest + 1)
 
 
 def create_employee(db: Session, payload: EmployeeCreate, actor: User) -> Employee:

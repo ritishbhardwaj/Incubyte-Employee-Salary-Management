@@ -27,11 +27,18 @@ def get_user_by_email(db: DbSession, email: str) -> User | None:
 
 def ensure_hr_user(db: DbSession, settings: Settings | None = None) -> User:
     settings = settings or get_settings()
-    existing = get_user_by_email(db, settings.hr_email)
+    target = settings.hr_email.lower()
+    existing = get_user_by_email(db, target)
     if existing:
         return existing
+    users = list(db.scalars(select(User)).all())
+    if len(users) == 1:
+        users[0].email = target
+        users[0].password_hash = hash_password(settings.hr_password)
+        db.flush()
+        return users[0]
     user = User(
-        email=settings.hr_email.lower(),
+        email=target,
         password_hash=hash_password(settings.hr_password),
         created_at=utcnow(),
     )

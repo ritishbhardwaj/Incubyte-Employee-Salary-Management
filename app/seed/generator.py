@@ -6,6 +6,7 @@ from datetime import date, timedelta
 from decimal import ROUND_HALF_UP, Decimal
 
 from app.core.fx import get_fx_rate
+from app.core.org import EMAIL_DOMAIN, format_employee_code
 from app.employees.models import JOB_LEVELS
 
 DEPARTMENTS = (
@@ -214,7 +215,7 @@ def generate_employees(count: int, seed: int) -> list[SeedEmployee]:
         salary, rate, usd = _salary_for(rng, country, department, level, currency)
         rows.append(
             SeedEmployee(
-                employee_code=f"ACME-{index:05d}",
+                employee_code=format_employee_code(index),
                 first_name=first,
                 last_name=last,
                 email=email,
@@ -235,11 +236,11 @@ def generate_employees(count: int, seed: int) -> list[SeedEmployee]:
 
 
 def _unique_email(first: str, last: str, index: int, used: set[str]) -> str:
-    base = f"{first}.{last}.{index}@acme.example".lower()
+    base = f"{first}.{last}.{index}@{EMAIL_DOMAIN}".lower()
     email = base
     suffix = 1
     while email in used:
-        email = f"{first}.{last}.{index}.{suffix}@acme.example".lower()
+        email = f"{first}.{last}.{index}.{suffix}@{EMAIL_DOMAIN}".lower()
         suffix += 1
     used.add(email)
     return email

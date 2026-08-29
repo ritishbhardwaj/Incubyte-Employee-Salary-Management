@@ -15,7 +15,7 @@ from app.employees.schemas import EmployeeCreate
 from app.employees.service import create_employee
 
 
-def _create(db, email="pay.person@acme.example"):
+def _create(db, email="pay.person@esmincubyte.example"):
     actor = get_user_by_email(db, get_settings().hr_email)
     payload = EmployeeCreate(
         first_name="Pay",
@@ -66,7 +66,7 @@ def test_adjust_closes_current_and_inserts_new(db) -> None:
 
 
 def test_rejects_future_effective_from(db) -> None:
-    employee, actor = _create(db, email="future.person@acme.example")
+    employee, actor = _create(db, email="future.person@esmincubyte.example")
     try:
         adjust_compensation(
             db,

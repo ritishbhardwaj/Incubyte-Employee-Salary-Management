@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { api } from "../api";
 import ApiError from "../components/ApiError";
+import { ORG_NAME } from "../org";
 
 function money(value) {
   if (value === null || value === undefined) return "—";
@@ -32,7 +33,7 @@ export default function InsightsPage() {
   return (
     <Stack>
       <div>
-        <Title order={2}>How ACME pays</Title>
+        <Title order={2}>How {ORG_NAME} pays</Title>
         <Text c="dimmed">Active employees, current compensation, USD reporting amounts.</Text>
       </div>
       <ApiError error={error} />

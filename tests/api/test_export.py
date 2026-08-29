@@ -6,7 +6,7 @@ def test_csv_export_uses_filters(client, auth_headers) -> None:
     client.post(
         "/api/v1/employees",
         json=employee_payload(
-            email="other@acme.example",
+            email="other@esmincubyte.example",
             first_name="Other",
             department="Sales",
         ),

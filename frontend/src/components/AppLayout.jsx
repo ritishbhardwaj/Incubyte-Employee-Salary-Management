@@ -1,6 +1,7 @@
 import { AppShell, Button, Group, NavLink, Text } from "@mantine/core";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { api } from "../api";
+import { ORG_NAME } from "../org";
 
 export default function AppLayout({ user, onLogout }) {
   const location = useLocation();
@@ -21,7 +22,7 @@ export default function AppLayout({ user, onLogout }) {
           <div>
             <Text fw={700}>IncubyteESM</Text>
             <Text size="xs" c="dimmed">
-              ACME salary management
+              {ORG_NAME} salary management
             </Text>
           </div>
           <Group>

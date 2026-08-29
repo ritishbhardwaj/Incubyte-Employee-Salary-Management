@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.core.db import REQUIRED_TABLES, get_db
 from app.core.exceptions import AppError
+from app.core.org import ORG_NAME
 
 FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
@@ -14,7 +15,7 @@ FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
 def create_app() -> FastAPI:
     application = FastAPI(
         title="IncubyteESM",
-        summary="ACME employee salary management for the HR Manager.",
+        summary=f"{ORG_NAME} employee salary management for the HR Manager.",
         version="0.1.0",
     )
 

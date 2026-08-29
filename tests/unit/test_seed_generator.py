@@ -1,4 +1,12 @@
+from app.core.org import EMAIL_DOMAIN, EMPLOYEE_CODE_PREFIX, format_employee_code
 from app.seed.generator import generate_employees
+
+
+def test_seed_uses_org_identity() -> None:
+    row = generate_employees(1, 42)[0]
+    assert row.employee_code == format_employee_code(1)
+    assert row.employee_code.startswith(f"{EMPLOYEE_CODE_PREFIX}-")
+    assert row.email.endswith(f"@{EMAIL_DOMAIN}")
 
 
 def test_seed_is_deterministic() -> None:

@@ -3,9 +3,9 @@ HEADER = (
     "job_level,employment_status,hire_date,annual_salary,currency"
 )
 CSV = f"""{HEADER}
-Good,Row,good.row@acme.example,United States,Austin,Engineering,Engineer,IC2,ACTIVE,2022-01-01,90000,USD
-Bad,Row,bad.row@acme.example,United States,Austin,Engineering,Engineer,IC2,ACTIVE,2022-01-01,-5,USD
-Dup,Mail,good.row@acme.example,United States,Austin,Engineering,Engineer,IC2,ACTIVE,2022-01-01,90000,USD
+Good,Row,good.row@esmincubyte.example,United States,Austin,Engineering,Engineer,IC2,ACTIVE,2022-01-01,90000,USD
+Bad,Row,bad.row@esmincubyte.example,United States,Austin,Engineering,Engineer,IC2,ACTIVE,2022-01-01,-5,USD
+Dup,Mail,good.row@esmincubyte.example,United States,Austin,Engineering,Engineer,IC2,ACTIVE,2022-01-01,90000,USD
 """
 
 

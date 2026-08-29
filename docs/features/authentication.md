@@ -2,7 +2,7 @@
 
 ## Intent
 
-Only the ACME HR Manager may see or change salary data. The app is a same-origin SPA. Credentials are not stored in JavaScript-accessible storage.
+Only the ESMINCUBYTE HR Manager may see or change salary data. The app is a same-origin SPA. Credentials are not stored in JavaScript-accessible storage.
 
 ## Actors
 

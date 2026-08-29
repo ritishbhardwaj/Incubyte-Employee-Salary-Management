@@ -26,7 +26,7 @@ Response:
 
 first_name, last_name, email, country, city, department, job_title, job_level, employment_status, hire_date, annual_salary, currency
 
-Optional: employee_code, effective_from or compensation_effective_from, reason or compensation_reason.
+Optional: employee_code, effective_from or compensation_effective_from, reason or compensation_reason. If `employee_code` is omitted, the next `ESMINCUBYTE-#####` code is assigned. Seeded and sample emails use `@esmincubyte.example`.
 
 UTF-8 (BOM allowed). Missing header columns fail the whole file as row 1 (no data to write).
 

@@ -4,7 +4,7 @@ from tests.conftest import employee_payload
 def _seed_pay(client, auth_headers) -> None:
     people = [
         employee_payload(
-            email="one@acme.example",
+            email="one@esmincubyte.example",
             first_name="One",
             country="United States",
             department="Engineering",
@@ -18,7 +18,7 @@ def _seed_pay(client, auth_headers) -> None:
             },
         ),
         employee_payload(
-            email="two@acme.example",
+            email="two@esmincubyte.example",
             first_name="Two",
             country="India",
             department="Engineering",
@@ -32,7 +32,7 @@ def _seed_pay(client, auth_headers) -> None:
             },
         ),
         employee_payload(
-            email="gone@acme.example",
+            email="gone@esmincubyte.example",
             first_name="Gone",
             employment_status="TERMINATED",
             hire_date="2019-01-01",

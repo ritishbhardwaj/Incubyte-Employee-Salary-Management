@@ -6,7 +6,7 @@ Record this after migrate + seed. Use the default HR login unless you changed `.
    Open the app. Show IncubyteESM branding and the prefilled HR account. Sign in. Mention cookies, not a JWT in DevTools Application > Local Storage.
 
 2. **Insights (50s)**  
-   Land on Insights. Point at active headcount, total annual payroll USD, average, median (or the Postgres-only note if you are on SQLite). Scroll distribution and country/department/level tables. This is the answer to "how does ACME pay people?"
+   Land on Insights. Point at active headcount, total annual payroll USD, average, median (or the Postgres-only note if you are on SQLite). Scroll distribution and country/department/level tables. This is the answer to "how does ESMINCUBYTE pay people?"
 
 3. **Directory (40s)**  
    Employees. Search a name. Filter a country. Change page. Note the total count (~10,000). Export CSV of the current filter and open it in a spreadsheet — the Excel exit path, not the system of record.

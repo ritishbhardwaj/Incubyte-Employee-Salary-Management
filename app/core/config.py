@@ -2,6 +2,8 @@ from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from app.core.org import HR_EMAIL
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -15,7 +17,7 @@ class Settings(BaseSettings):
     db_pool_size: int = 5
     db_max_overflow: int = 0
 
-    hr_email: str = "hr.manager@acme.example"
+    hr_email: str = HR_EMAIL
     hr_password: str = "ChangeMeNow!"
 
     allowed_origins: str = (

@@ -29,7 +29,7 @@ python -m app.seed --employees 10000 --seed 42
 
 No gender or other unnecessary sensitive fields.
 
-Codes: `ACME-00001` … `ACME-10000`. Emails: `{first}.{last}.{n}@acme.example`.
+Identity comes from `app.core.org`: org short name `ESMINCUBYTE`, codes `ESMINCUBYTE-00001` … `ESMINCUBYTE-10000`, emails `{first}.{last}.{n}@esmincubyte.example`. The HR login default is `hr.manager@esmincubyte.example`.
 
 The same `--seed` always yields the same emails and amounts (unit-tested).
 

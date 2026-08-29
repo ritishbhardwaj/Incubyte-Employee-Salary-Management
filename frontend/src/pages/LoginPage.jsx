@@ -2,9 +2,10 @@ import { Button, Card, PasswordInput, Stack, Text, TextInput, Title } from "@man
 import { useState } from "react";
 import { api } from "../api";
 import ApiError from "../components/ApiError";
+import { HR_EMAIL, ORG_NAME } from "../org";
 
 export default function LoginPage({ onLogin }) {
-  const [email, setEmail] = useState("hr.manager@acme.example");
+  const [email, setEmail] = useState(HR_EMAIL);
   const [password, setPassword] = useState("ChangeMeNow!");
   const [fieldError, setFieldError] = useState("");
   const [error, setError] = useState(null);
@@ -34,7 +35,7 @@ export default function LoginPage({ onLogin }) {
       <Card withBorder shadow="sm" w={420} p="xl">
         <Title order={2}>IncubyteESM</Title>
         <Text c="dimmed" mb="md">
-          Sign in as ACME HR Manager
+          Sign in as {ORG_NAME} HR Manager
         </Text>
         <form onSubmit={handleSubmit}>
           <Stack>

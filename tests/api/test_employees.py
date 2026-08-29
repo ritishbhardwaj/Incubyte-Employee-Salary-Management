@@ -10,7 +10,7 @@ def test_create_list_get_patch_employee(client, auth_headers) -> None:
     created = client.post("/api/v1/employees", json=employee_payload(), headers=auth_headers)
     assert created.status_code == 201, created.text
     body = created.json()
-    assert body["employee_code"].startswith("ACME-")
+    assert body["employee_code"].startswith("ESMINCUBYTE-")
     assert body["current_compensation"]["currency"] == "GBP"
     assert body["current_compensation"]["annual_salary_usd"]
     employee_id = body["id"]
@@ -22,7 +22,7 @@ def test_create_list_get_patch_employee(client, auth_headers) -> None:
 
     fetched = client.get(f"/api/v1/employees/{employee_id}")
     assert fetched.status_code == 200
-    assert fetched.json()["email"] == "ada.lovelace@acme.example"
+    assert fetched.json()["email"] == "ada.lovelace@esmincubyte.example"
 
     patched = client.patch(
         f"/api/v1/employees/{employee_id}",
@@ -45,7 +45,7 @@ def test_duplicate_email_conflicts(client, auth_headers) -> None:
 def test_pagination_and_filter(client, auth_headers) -> None:
     for i in range(3):
         payload = employee_payload(
-            email=f"eng{i}@acme.example",
+            email=f"eng{i}@esmincubyte.example",
             department="Engineering",
             first_name=f"Eng{i}",
         )
@@ -53,7 +53,7 @@ def test_pagination_and_filter(client, auth_headers) -> None:
             client.post("/api/v1/employees", json=payload, headers=auth_headers).status_code == 201
         )
     payload = employee_payload(
-        email="sales@acme.example",
+        email="sales@esmincubyte.example",
         department="Sales",
         first_name="Sal",
         last_name="Person",

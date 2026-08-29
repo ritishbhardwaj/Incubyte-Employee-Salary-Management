@@ -2,7 +2,7 @@
 
 ## Intent
 
-HR must answer how ACME pays people without downloading 10,000 rows. All figures use **stored** `annual_salary_usd` on **current** rows (`effective_to IS NULL`) for **ACTIVE** employees unless noted.
+HR must answer how ESMINCUBYTE pays people without downloading 10,000 rows. All figures use **stored** `annual_salary_usd` on **current** rows (`effective_to IS NULL`) for **ACTIVE** employees unless noted.
 
 ## HTTP
 

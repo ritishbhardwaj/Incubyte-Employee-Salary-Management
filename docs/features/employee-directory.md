@@ -33,7 +33,7 @@ Response: `{ items, total, page, page_size }`. The UI never receives 10,000 rows
 
 Employee fields plus nested `compensation`: `annual_salary`, `currency`, optional `effective_from` (defaults today, cannot be future or before hire), `reason` (default "Initial compensation").
 
-`employee_code` is optional. If omitted, the next `ACME-00001` style code is generated.
+`employee_code` is optional. If omitted, the next `ESMINCUBYTE-00001` style code is generated (`app.core.org.EMPLOYEE_CODE_PREFIX`). The allocator scans existing codes with that prefix and increments the numeric suffix. Custom codes are allowed if unique.
 
 Emails are stored lowercased. Duplicate email or code is 409.
 

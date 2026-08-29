@@ -27,7 +27,7 @@ Layers are only **router -> service -> SQLAlchemy**. There is no repository or u
 
 | Package | Responsibility |
 |---|---|
-| `app.core` | Settings, engine, FX table, CSRF helpers, pagination, domain errors |
+| `app.core` | Settings, engine, FX table, org identity (`ESMINCUBYTE` codes/emails), CSRF helpers, pagination, domain errors |
 | `app.auth` | Users, hashed sessions, login/logout/me, current-user dependency |
 | `app.employees` | Employee identity and directory queries |
 | `app.compensation` | Effective-dated pay ledger |

@@ -1,7 +1,7 @@
 [project]
 name = "incubyteesm"
 version = "0.1.0"
-description = "IncubyteESM - ACME employee salary management"
+description = "IncubyteESM - ESMINCUBYTE employee salary management"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[standard]>=0.138.0",

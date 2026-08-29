@@ -20,7 +20,7 @@ Essential follow-ups that did not belong in the MVP.
 ## Platform
 
 - [ ] Rotate the Neon role password if it was ever pasted into `.env.example`, committed, or shared in chat. Keep the live URL only in `.env`.
-- [ ] Confirm migrate + seed from this Windows machine after the IPv4 `hostaddr` pin (first Neon wake can still take 10–30s).
+- [ ] Re-seed Neon with `--force` after the org rename so existing `employee_code` / email rows match `ESMINCUBYTE` (not leftover fictional codes).
 - [ ] CI job that runs pytest + frontend tests + ruff + `npm run lint` on every push.
 - [ ] Optional marked PostgreSQL test for `percentile_cont` against `DATABASE_URL_TEST`.
 - [ ] FastAPI Cloud GitHub Action that builds `frontend/dist` then `fastapi deploy`.

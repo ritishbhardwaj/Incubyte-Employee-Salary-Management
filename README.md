@@ -1,6 +1,6 @@
 ﻿# IncubyteESM
 
-Employee salary management for ACME's HR Manager. FastAPI + React (JavaScript) + Neon PostgreSQL, served as one FastAPI Cloud app.
+Employee salary management for ESMINCUBYTE's HR Manager. FastAPI + React (JavaScript) + Neon PostgreSQL, served as one FastAPI Cloud app.
 
 This is not a payroll engine. It is a same-origin web app to manage people and pay, and to answer how the organization pays — without Excel as the system of record.
 
@@ -38,7 +38,7 @@ Vite proxies `/api` to `http://127.0.0.1:8000`. Open `http://localhost:5173`.
 
 Default HR login (from `.env.example`):
 
-- Email: `hr.manager@acme.example`
+- Email: `hr.manager@esmincubyte.example`
 - Password: `ChangeMeNow!`
 
 Startup does **not** migrate or seed. Those stay operational commands.
