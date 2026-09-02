@@ -9,6 +9,7 @@ from sqlalchemy import Date, DateTime, ForeignKey, Index, Numeric, String, Uuid,
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.session import Base
+from app.services import employees
 
 
 class EmploymentStatus(StrEnum):
@@ -33,8 +34,8 @@ class User(Base):
 
 class Session(Base):
     __tablename__ = "sessions"
-
     id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    # creating this as foreign key kyuki we are making the one-to-many relationship with the users table
     user_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
     )
@@ -46,7 +47,9 @@ class Session(Base):
 
     user: Mapped[User] = relationship(back_populates="sessions")
 
-
+    employeessss:Mapped['Employee'] = relationship(back_populates="user")
+    
+    
 class Employee(Base):
     __tablename__ = "employees"
 
@@ -66,6 +69,7 @@ class Employee(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     compensation_records: Mapped[list[CompensationRecord]] = relationship(back_populates="employee")
+    user:Mapped[Session] = relationship(back_populates="employeessss")
 
 
 class CompensationRecord(Base):

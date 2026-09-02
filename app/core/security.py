@@ -52,6 +52,10 @@ def origin_from_referer(referer: str | None) -> str | None:
 
 
 def effective_origin(request: Request) -> str | None:
+    print(request.headers.get("referer"))
+    print(origin_from_referer(request.headers.get("referer")))
+    print(normalize_origin(request.headers.get("origin")))
+    print(normalize_origin(origin_from_referer(request.headers.get("referer"))))
     return normalize_origin(request.headers.get("origin")) or origin_from_referer(
         request.headers.get("referer")
     )
