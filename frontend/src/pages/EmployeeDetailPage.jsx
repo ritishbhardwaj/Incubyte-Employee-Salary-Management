@@ -1,7 +1,7 @@
 import { Button, Card, Grid, Group, Modal, Select, Stack, Table, Text, TextInput, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { api } from "../api";
+import { api } from "../lib/api";
 import ApiError from "../components/ApiError";
 import SalaryAdjustForm from "../components/SalaryAdjustForm";
 

@@ -1,9 +1,9 @@
 import { Card, Grid, SimpleGrid, Stack, Table, Text, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { api } from "../api";
 import ApiError from "../components/ApiError";
-import { ORG_NAME } from "../org";
+import { api } from "../lib/api";
+import { ORG_NAME } from "../lib/org";
 
 function money(value) {
   if (value === null || value === undefined) return "—";

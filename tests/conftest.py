@@ -4,11 +4,11 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.auth.service import ensure_hr_user
-from app.core.config import get_settings
-from app.core.db import Base, build_engine, get_db
-from app.core.models import CompensationRecord, Employee, User  # noqa: F401
+from app.config import get_settings
+from app.database.models import CompensationRecord, Employee, User  # noqa: F401
+from app.database.session import Base, build_engine, get_db
 from app.main import app
+from app.services.auth import ensure_hr_user
 
 ORIGIN = "http://testserver"
 

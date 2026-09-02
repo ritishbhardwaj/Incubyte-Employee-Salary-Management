@@ -1,4 +1,4 @@
-from app.core.pagination import clamp_page, offset_for
+from app.pagination import clamp_page, offset_for
 
 
 def test_clamp_page_floors_and_caps() -> None:

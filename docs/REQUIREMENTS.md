@@ -83,7 +83,7 @@ A single React application served from the same FastAPI process in production:
 
 ## Deployment and data
 
-- Backend: FastAPI (Python), feature packages, Router then Service then SQLAlchemy.
+- Backend: FastAPI (Python), `api/` routers + `services/` + `database/models.py`, Router then Service then SQLAlchemy.
 - Frontend: React + JavaScript, Mantine, Recharts.
 - Database: Neon PostgreSQL. Credentials live in .env / host secrets, never in git.
 - Ship: one FastAPI Cloud app serves /api/v1/* and the built SPA. No extra frontend host, no workers.

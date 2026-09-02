@@ -50,6 +50,10 @@ Good rows in the same file still commit. That avoids "one typo blocks 9,999 peop
 
 Import is available on the API (and can be wired to a file input later). The demo script emphasizes export; import is documented for reviewers hitting the endpoint or a future button.
 
+## Code
+
+`app/api/routers/imports.py` accepts the multipart file. `app/services/imports.py` parses UTF-8 CSV, validates each data row, and calls `create_employee` for good rows. `app/api/schemas/imports.py` is the result body.
+
 ## Tests
 
 Mixed CSV: one created, negative salary and duplicate email fail, only the good email is listable. `.xlsx` filename rejected.

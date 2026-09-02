@@ -12,7 +12,7 @@ IncubyteESM is a **modular monolith** in one OS process:
 HR browser
     |  same origin in production (FastAPI Cloud)
     v
-FastAPI  ---- JSON /api/v1 ---->  feature packages
+FastAPI  ---- JSON /api/v1 ---->  routers -> services
     |                                |
     +-- static SPA                   +-- SQLAlchemy sessions
                                      v
@@ -21,22 +21,51 @@ FastAPI  ---- JSON /api/v1 ---->  feature packages
 
 Local development splits the origin on purpose: Vite on `:5173` proxies `/api`, `/health`, and `/ready` to FastAPI on `:8000` so cookies stay first-party from the browser's point of view.
 
-## Packages
+## Layout
 
-Layers are only **router -> service -> SQLAlchemy**. There is no repository or unit-of-work wrapper.
+The backend is a small FastAPI app, not a feature-package forest. Layers are only **router -> service -> SQLAlchemy**. There is no repository or unit-of-work wrapper.
 
-| Package | Responsibility |
+```
+app/
+  main.py                 FastAPI app: /health, /ready, AppError handler, SPA mount
+  config.py               Settings from .env
+  org.py                  ESMINCUBYTE name, email domain, employee-code prefix
+  fx.py                   Static FX table + to_usd
+  exceptions.py           AppError and HTTP-mapped subclasses
+  pagination.py           page / page_size helpers
+  seed.py                 CLI: python -m app.seed
+  api/
+    router.py             master_router (includes every area router)
+    dependencies.py       get_current_user, require_csrf
+    routers/              one file per HTTP area
+    schemas/              Pydantic request/response models
+  core/
+    security.py           bcrypt, session SHA-256, CSRF / Origin
+  database/
+    models.py             ALL tables in one file
+    session.py            engine, get_db, Neon IPv4 / SSL / timeout
+  services/               business logic, one file per area
+```
+
+| Module | Responsibility |
 |---|---|
-| `app.core` | Settings, engine, FX table, org identity (`ESMINCUBYTE` codes/emails), CSRF helpers, pagination, domain errors |
-| `app.auth` | Users, hashed sessions, login/logout/me, current-user dependency |
-| `app.employees` | Employee identity and directory queries |
-| `app.compensation` | Effective-dated pay ledger |
-| `app.analytics` | SQL insights; PostgreSQL percentiles isolated in `pg_percentiles.py` |
-| `app.exports` | Filtered CSV |
-| `app.imports` | Validated CSV with row-level errors |
-| `app.seed` | CLI-only deterministic generator |
+| `app.main` | Create the FastAPI app. Include `master_router`. Mount `frontend/dist`. |
+| `app.config` | `Settings` / `get_settings()`. |
+| `app.org` | Org identity: `ESMINCUBYTE` codes and `@esmincubyte.example` emails. |
+| `app.fx` | Static FX map. Snapshot at write. Changing this file does not rewrite history. |
+| `app.exceptions` | Domain errors turned into JSON `{detail}` by the app handler. |
+| `app.core.security` | Passwords, `hash_session_token`, CSRF header vs cookie, Origin allowlist. |
+| `app.database.models` | `User`, `Session`, `Employee`, `CompensationRecord`, `EmploymentStatus`, `JOB_LEVELS`. |
+| `app.database.session` | Engine, `get_db`, `build_engine` (SSL, 15s timeout, IPv4 `hostaddr`). |
+| `app.api.router` | `master_router` — the only include from `main.py`. |
+| `app.api.routers.*` | HTTP only. No SQL. Auth, employees, compensation, analytics, exports, imports. |
+| `app.api.schemas.*` | Request and response shapes. |
+| `app.services.*` | Transactions, ledger rules, directory queries, CSV, insights. Percentiles: `pg_percentiles.py`. |
+| `app.seed` | Deterministic generator + CLI. Never runs on process start. |
 
 `app.main:app` is the FastAPI Cloud entrypoint (`[tool.fastapi] entrypoint`).
+
+Frontend follows the same idea: `frontend/src/lib/api.js` (cookie + CSRF `fetch`) and `frontend/src/lib/org.js` (display name + demo email). Pages and components stay under `pages/` and `components/` because this SPA has those screens.
 
 ## Persistence
 
@@ -67,6 +96,6 @@ Everything else under `/api/v1` requires a valid session. `/ready` is 503 if the
 
 ## Frontend
 
-Vite + React 18 + JavaScript + Mantine + Recharts. `fetch` uses `credentials: "include"`. No token is stored in `localStorage`.
+Vite + React 18 + JavaScript + Mantine + Recharts. `frontend/src/lib/api.js` uses `fetch` with `credentials: "include"` and sends `X-CSRF-Token` from the `iesm_csrf` cookie on mutations. No token is stored in `localStorage`.
 
-In production `app.frontend("/", directory="frontend/dist", fallback="index.html")` is mounted only if `frontend/dist` exists, so `fastapi dev` still works before `npm run build`.
+`app.frontend("/", directory="frontend/dist", fallback="index.html")` is mounted when the Vite build exists. Then `GET /` is the SPA (login / insights), not Swagger. `/docs` stays at `/docs`. API routes win over the SPA fallback. Production (`ENVIRONMENT=production`) refuses to start if `frontend/dist` is missing so Cloud cannot ship an API-only homepage.

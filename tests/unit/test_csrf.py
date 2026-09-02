@@ -1,4 +1,4 @@
-from app.core.csrf import origin_is_allowed, tokens_match
+from app.core.security import origin_is_allowed, tokens_match
 
 
 def test_tokens_must_match_exactly() -> None:

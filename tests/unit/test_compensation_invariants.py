@@ -1,18 +1,18 @@
 from datetime import date
 from decimal import Decimal
 
-from app.auth.service import get_user_by_email
-from app.compensation.schemas import CompensationCreate
-from app.compensation.service import (
+from app.api.schemas.compensation import CompensationCreate
+from app.api.schemas.employees import EmployeeCreate
+from app.config import get_settings
+from app.database.models import EmploymentStatus
+from app.exceptions import ValidationAppError
+from app.services.auth import get_user_by_email
+from app.services.compensation import (
     adjust_compensation,
     get_current_compensation,
     list_compensation_history,
 )
-from app.core.config import get_settings
-from app.core.exceptions import ValidationAppError
-from app.employees.models import EmploymentStatus
-from app.employees.schemas import EmployeeCreate
-from app.employees.service import create_employee
+from app.services.employees import create_employee
 
 
 def _create(db, email="pay.person@esmincubyte.example"):

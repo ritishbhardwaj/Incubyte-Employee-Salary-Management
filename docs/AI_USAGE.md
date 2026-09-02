@@ -5,7 +5,7 @@ This assessment expects intentional AI use with human judgment. Work was done in
 ## What the model was asked to do
 
 1. Turn the Incubyte brief into a product-shaped plan (persona, in-scope, explicit non-goals).
-2. Revise that plan when architecture constraints changed (cookie sessions, compensation ledger, no startup seed, `/api/v1`, CSV, feature packages).
+2. Revise that plan when architecture constraints changed (cookie sessions, compensation ledger, no startup seed, `/api/v1`, CSV, simple `api/` + `services/` + `database/` layout).
 3. Implement the plan stage by stage: requirements first, then backend, tests, seed, React UI, docs.
 4. Keep commits user-owned: suggest messages, do not run `git commit`.
 

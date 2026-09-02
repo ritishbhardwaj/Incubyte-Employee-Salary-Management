@@ -1,1 +1,0 @@
-"""Effective-dated compensation ledger."""

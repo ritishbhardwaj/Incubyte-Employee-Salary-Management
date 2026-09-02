@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { api } from "./api";
+import { api } from "./lib/api";
 import AppLayout from "./components/AppLayout";
 import EmployeeDetailPage from "./pages/EmployeeDetailPage";
 import EmployeesPage from "./pages/EmployeesPage";

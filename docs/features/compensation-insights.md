@@ -17,7 +17,7 @@ All authenticated GET.
 
 ## Percentiles and dialect honesty
 
-Production PostgreSQL uses `percentile_cont` in `app/analytics/pg_percentiles.py`.
+Production PostgreSQL uses `percentile_cont` in `app/services/pg_percentiles.py`.
 
 SQLite tests (and any non-Postgres bind) return:
 
@@ -36,6 +36,15 @@ Portable aggregates (count, sum, avg, group by, bucket case) are SQL on both dia
 ## Distribution buckets (USD)
 
 0-40k, 40-60k, 60-80k, 80-100k, 100-130k, 130-160k, 160-200k, 200k+. Half-open except the last.
+
+## Code
+
+| File | Role |
+|---|---|
+| `app/services/analytics.py` | Summary, breakdowns, distribution, recent changes. |
+| `app/services/pg_percentiles.py` | PostgreSQL `percentile_cont` only. Never used on SQLite. |
+| `app/api/routers/analytics.py` | `/api/v1/analytics/*`. |
+| `app/api/schemas/analytics.py` | Response models. |
 
 ## UI
 

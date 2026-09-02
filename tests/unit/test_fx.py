@@ -2,8 +2,8 @@ from decimal import Decimal
 
 import pytest
 
-from app.core.exceptions import ValidationAppError
-from app.core.fx import get_fx_rate, to_usd
+from app.exceptions import ValidationAppError
+from app.fx import get_fx_rate, to_usd
 
 
 def test_usd_is_identity() -> None:

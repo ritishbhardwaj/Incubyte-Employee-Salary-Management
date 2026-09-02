@@ -1,8 +1,8 @@
 from datetime import UTC, datetime, timedelta
 
-from app.auth.models import Session
-from app.auth.service import create_session, hash_session_token, resolve_session, revoke_session
-from app.core.exceptions import UnauthorizedError
+from app.database.models import Session
+from app.exceptions import UnauthorizedError
+from app.services.auth import create_session, hash_session_token, resolve_session, revoke_session
 
 
 def test_hash_is_sha256_hex() -> None:
@@ -12,8 +12,8 @@ def test_hash_is_sha256_hex() -> None:
 
 
 def test_revoked_session_is_rejected(db) -> None:
-    from app.auth.service import get_user_by_email
-    from app.core.config import get_settings
+    from app.config import get_settings
+    from app.services.auth import get_user_by_email
 
     user = get_user_by_email(db, get_settings().hr_email)
     raw = create_session(db, user)
@@ -28,8 +28,8 @@ def test_revoked_session_is_rejected(db) -> None:
 
 
 def test_expired_session_is_rejected(db) -> None:
-    from app.auth.service import get_user_by_email
-    from app.core.config import get_settings
+    from app.config import get_settings
+    from app.services.auth import get_user_by_email
 
     user = get_user_by_email(db, get_settings().hr_email)
     raw = create_session(db, user)

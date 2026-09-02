@@ -1,8 +1,8 @@
 import { Button, Card, PasswordInput, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useState } from "react";
-import { api } from "../api";
 import ApiError from "../components/ApiError";
-import { HR_EMAIL, ORG_NAME } from "../org";
+import { api } from "../lib/api";
+import { HR_EMAIL, ORG_NAME } from "../lib/org";
 
 export default function LoginPage({ onLogin }) {
   const [email, setEmail] = useState(HR_EMAIL);

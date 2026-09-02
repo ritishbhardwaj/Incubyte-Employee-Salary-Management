@@ -1,4 +1,4 @@
-from app.core.config import get_settings
+from app.config import get_settings
 
 
 def test_login_sets_http_only_session_cookie(client) -> None:

@@ -4,6 +4,18 @@
 
 Only the ESMINCUBYTE HR Manager may see or change salary data. The app is a same-origin SPA. Credentials are not stored in JavaScript-accessible storage.
 
+## Code
+
+| File | Role |
+|---|---|
+| `app/api/routers/auth.py` | `POST /login`, `POST /logout`, `GET /me`. Sets/clears cookies. |
+| `app/api/dependencies.py` | `get_current_user`, `require_csrf`. |
+| `app/api/schemas/auth.py` | Login body and user out. |
+| `app/services/auth.py` | Authenticate, create/resolve/revoke session, ensure HR user. |
+| `app/core/security.py` | bcrypt, SHA-256 of session token, CSRF + Origin checks. |
+| `app/database/models.py` | `User` and `Session` tables. |
+| `frontend/src/lib/api.js` | `credentials: "include"` and `X-CSRF-Token` from `iesm_csrf`. |
+
 ## Actors
 
 One seeded user: `HR_EMAIL` / `HR_PASSWORD` (defaults in `.env.example`). Created by `python -m app.seed` via `ensure_hr_user`.

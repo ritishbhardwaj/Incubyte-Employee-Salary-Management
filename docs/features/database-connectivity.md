@@ -2,6 +2,8 @@
 
 IncubyteESM talks to PostgreSQL through SQLAlchemy + psycopg. Production is Neon. Tests use in-memory SQLite and never open Neon.
 
+Implementation: `app/database/session.py` (`build_engine`, `get_db`, `postgres_connect_args`). Tables live in `app/database/models.py`. Alembic `env.py` imports both so migrate uses the same SSL / timeout / IPv4 behavior as the API and seed.
+
 ## Configuration
 
 | Setting | Source | Role |

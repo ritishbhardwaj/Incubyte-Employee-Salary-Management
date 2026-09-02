@@ -24,7 +24,7 @@ Partial unique index: one row per employee where `effective_to IS NULL`.
 ## Rules
 
 1. Money is `Decimal`. Never float.
-2. FX comes from `app/core/fx.py`. Unsupported currency is 400.
+2. FX comes from `app/fx.py`. Unsupported currency is 400.
 3. `annual_salary` must be > 0.
 4. `effective_from` cannot be in the future (MVP).
 5. `effective_from` cannot be before hire date or before the current period start.
@@ -42,6 +42,16 @@ Partial unique index: one row per employee where `effective_to IS NULL`.
 ## UI
 
 Adjust salary modal: amount, currency, date, reason. Client rejects empty reason and non-positive amount before the API. History table shows from/to/local/USD/reason.
+
+## Code
+
+| File | Role |
+|---|---|
+| `app/database/models.py` | `CompensationRecord` only. No salary columns on `Employee`. |
+| `app/services/compensation.py` | Initial row, adjust (close + insert), current, history. |
+| `app/api/routers/compensation.py` | `POST/GET .../compensation`. |
+| `app/api/schemas/compensation.py` | Create, adjust, out. |
+| `app/fx.py` | Static rates; snapshot stored on the row. |
 
 ## Tests
 

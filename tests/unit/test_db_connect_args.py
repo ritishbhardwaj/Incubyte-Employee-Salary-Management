@@ -1,6 +1,6 @@
 import socket
 
-from app.core.db import (
+from app.database.session import (
     CONNECT_TIMEOUT_SECONDS,
     normalize_database_url,
     postgres_connect_args,
@@ -20,7 +20,7 @@ def test_prefer_ipv4_returns_a_record(monkeypatch) -> None:
         assert family == socket.AF_INET
         return [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("203.0.113.10", 5432))]
 
-    monkeypatch.setattr("app.core.db.socket.getaddrinfo", fake_getaddrinfo)
+    monkeypatch.setattr("app.database.session.socket.getaddrinfo", fake_getaddrinfo)
     assert prefer_ipv4_hostaddr("example.neon.tech") == "203.0.113.10"
 
 
@@ -28,12 +28,12 @@ def test_prefer_ipv4_none_when_dns_fails(monkeypatch) -> None:
     def fake_getaddrinfo(*_args, **_kwargs):
         raise socket.gaierror("no A record")
 
-    monkeypatch.setattr("app.core.db.socket.getaddrinfo", fake_getaddrinfo)
+    monkeypatch.setattr("app.database.session.socket.getaddrinfo", fake_getaddrinfo)
     assert prefer_ipv4_hostaddr("missing.example") is None
 
 
 def test_postgres_connect_args_ssl_timeout_and_hostaddr(monkeypatch) -> None:
-    monkeypatch.setattr("app.core.db.prefer_ipv4_hostaddr", lambda _host: "198.51.100.20")
+    monkeypatch.setattr("app.database.session.prefer_ipv4_hostaddr", lambda _host: "198.51.100.20")
     args = postgres_connect_args(
         "postgresql+psycopg://u:p@ep-demo.neon.tech/neondb",
         ssl_require=True,
@@ -44,7 +44,7 @@ def test_postgres_connect_args_ssl_timeout_and_hostaddr(monkeypatch) -> None:
 
 
 def test_postgres_connect_args_ssl_from_neon_host_without_flag(monkeypatch) -> None:
-    monkeypatch.setattr("app.core.db.prefer_ipv4_hostaddr", lambda _host: None)
+    monkeypatch.setattr("app.database.session.prefer_ipv4_hostaddr", lambda _host: None)
     args = postgres_connect_args(
         "postgresql+psycopg://u:p@ep-demo.neon.tech/neondb",
         ssl_require=False,

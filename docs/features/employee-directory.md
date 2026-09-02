@@ -33,7 +33,7 @@ Response: `{ items, total, page, page_size }`. The UI never receives 10,000 rows
 
 Employee fields plus nested `compensation`: `annual_salary`, `currency`, optional `effective_from` (defaults today, cannot be future or before hire), `reason` (default "Initial compensation").
 
-`employee_code` is optional. If omitted, the next `ESMINCUBYTE-00001` style code is generated (`app.core.org.EMPLOYEE_CODE_PREFIX`). The allocator scans existing codes with that prefix and increments the numeric suffix. Custom codes are allowed if unique.
+`employee_code` is optional. If omitted, the next `ESMINCUBYTE-00001` style code is generated (`app.org.EMPLOYEE_CODE_PREFIX`). The allocator scans existing codes with that prefix and increments the numeric suffix. Custom codes are allowed if unique.
 
 Emails are stored lowercased. Duplicate email or code is 409.
 
@@ -48,6 +48,16 @@ Job levels: `IC1`–`IC6`, `M1`–`M4`.
 Employees page: filters, paginated table, CSV export of the **applied** filter, add-employee modal (atomic initial pay).
 
 Detail page: profile patch (city, department, title, level, status) and compensation panel.
+
+## Code
+
+| File | Role |
+|---|---|
+| `app/database/models.py` | `Employee`, `EmploymentStatus`, `JOB_LEVELS`. |
+| `app/services/employees.py` | Create, list, get, patch, filter options, code allocator. |
+| `app/api/routers/employees.py` | `/employees` and `/meta/filters`. |
+| `app/api/schemas/employees.py` | Create, patch, list, detail. |
+| `app/org.py` | `EMPLOYEE_CODE_PREFIX`, `format_employee_code`. |
 
 ## Tests
 

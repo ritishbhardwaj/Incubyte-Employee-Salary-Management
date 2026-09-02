@@ -1,7 +1,7 @@
 import { Button, Modal, Pagination, Stack, Table, Text, TextInput, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "../api";
+import { api } from "../lib/api";
 import ApiError from "../components/ApiError";
 import EmployeeFilters from "../components/EmployeeFilters";
 

@@ -27,6 +27,10 @@ The export is unpaginated for the filter. For a full 10k unfiltered dump that is
 
 Employees page Export CSV uses the **applied** filter, not the unapplied form fields.
 
+## Code
+
+`app/api/routers/exports.py` streams the file. `app/services/exports.py` reuses directory filters from `app/services/employees.py` and writes current-pay columns.
+
 ## Tests
 
 Two employees, filter Engineering, CSV has a header and one data row, Sales absent.

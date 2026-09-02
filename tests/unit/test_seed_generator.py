@@ -1,5 +1,5 @@
-from app.core.org import EMAIL_DOMAIN, EMPLOYEE_CODE_PREFIX, format_employee_code
-from app.seed.generator import generate_employees
+from app.org import EMAIL_DOMAIN, EMPLOYEE_CODE_PREFIX, format_employee_code
+from app.seed import generate_employees
 
 
 def test_seed_uses_org_identity() -> None:

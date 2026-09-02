@@ -20,7 +20,7 @@ Without a worker, "become current at midnight" races with timezones and two-curr
 
 ## Static FX snapshots, not a live API
 
-Live rates add outages and make yesterday's payroll unexplained. Each record stores the rate used. Changing `app/core/fx.py` later does not rewrite history. Rates will drift from the market; that is accepted.
+Live rates add outages and make yesterday's payroll unexplained. Each record stores the rate used. Changing `app/fx.py` later does not rewrite history. Rates will drift from the market; that is accepted.
 
 ## No migrate/seed on startup
 

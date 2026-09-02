@@ -5,9 +5,11 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import inspect, text
 from sqlalchemy.orm import Session
 
-from app.core.db import REQUIRED_TABLES, get_db
-from app.core.exceptions import AppError
-from app.core.org import ORG_NAME
+from app.api.router import master_router
+from app.config import get_settings
+from app.database.session import REQUIRED_TABLES, get_db
+from app.exceptions import AppError
+from app.org import ORG_NAME
 
 FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
@@ -50,34 +52,27 @@ def create_app() -> FastAPI:
             )
         return JSONResponse(status_code=200, content={"status": "ready"})
 
-    _include_routers(application)
+    application.include_router(master_router)
     _mount_frontend(application)
     return application
 
 
-def _include_routers(application: FastAPI) -> None:
-    from app.analytics.router import router as analytics_router
-    from app.auth.router import router as auth_router
-    from app.compensation.router import router as compensation_router
-    from app.employees.router import router as employees_router
-    from app.exports.router import router as exports_router
-    from app.imports.router import router as imports_router
-
-    application.include_router(auth_router)
-    application.include_router(employees_router)
-    application.include_router(compensation_router)
-    application.include_router(analytics_router)
-    application.include_router(exports_router)
-    application.include_router(imports_router)
 
 
 def _mount_frontend(application: FastAPI) -> None:
-    application.frontend(
-        "/",
-        directory=str(FRONTEND_DIST),
-        fallback="index.html",
-        check_dir="auto",
-    )
+    if FRONTEND_DIST.is_dir():
+        application.frontend(
+            "/",
+            directory=str(FRONTEND_DIST),
+            fallback="index.html",
+            check_dir=False,
+        )
+        return
+    if get_settings().is_production:
+        raise RuntimeError(
+            f"SPA build missing at {FRONTEND_DIST}. "
+            "Run `npm --prefix frontend run build` before deploying."
+        )
 
 
 app = create_app()

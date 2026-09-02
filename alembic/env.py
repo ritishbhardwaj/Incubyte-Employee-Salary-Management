@@ -2,9 +2,9 @@ from logging.config import fileConfig
 
 from alembic import context
 
-from app.core.config import get_settings
-from app.core.db import Base, build_engine, normalize_database_url
-from app.core.models import CompensationRecord, Employee, Session, User  # noqa: F401
+from app.config import get_settings
+from app.database.models import CompensationRecord, Employee, Session, User  # noqa: F401
+from app.database.session import Base, build_engine, normalize_database_url
 
 config = context.config
 if config.config_file_name is not None:

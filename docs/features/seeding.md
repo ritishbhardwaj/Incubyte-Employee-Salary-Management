@@ -16,7 +16,7 @@ python -m app.seed --employees 10000 --seed 42
 - Compensation `reason` is `Seed` so insights "recent changes" can exclude them.
 - `created_by` is the HR user.
 
-## Generator (`app/seed/generator.py`)
+## Generator (`app/seed.py`)
 
 `random.Random(seed)` only. No Faker (non-deterministic versions).
 
@@ -29,10 +29,14 @@ python -m app.seed --employees 10000 --seed 42
 
 No gender or other unnecessary sensitive fields.
 
-Identity comes from `app.core.org`: org short name `ESMINCUBYTE`, codes `ESMINCUBYTE-00001` … `ESMINCUBYTE-10000`, emails `{first}.{last}.{n}@esmincubyte.example`. The HR login default is `hr.manager@esmincubyte.example`.
+Identity comes from `app.org`: org short name `ESMINCUBYTE`, codes `ESMINCUBYTE-00001` … `ESMINCUBYTE-10000`, emails `{first}.{last}.{n}@esmincubyte.example`. The HR login default is `hr.manager@esmincubyte.example`.
 
 The same `--seed` always yields the same emails and amounts (unit-tested).
 
 ## Why not startup seed
 
 First request on FastAPI Cloud would block on 10k inserts, hide failures, and surprise production redeploys. `/ready` only checks connectivity and schema presence.
+
+## Code
+
+`app/seed.py` is the whole feature: `generate_employees()` plus the `main()` CLI. It uses `app.org` for identity, `app.fx` for rates, `app.database.models` for rows, and `app.services.auth.ensure_hr_user` for the HR login.

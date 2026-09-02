@@ -1,7 +1,7 @@
 import { AppShell, Button, Group, NavLink, Text } from "@mantine/core";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { api } from "../api";
-import { ORG_NAME } from "../org";
+import { api } from "../lib/api";
+import { ORG_NAME } from "../lib/org";
 
 export default function AppLayout({ user, onLogout }) {
   const location = useLocation();
