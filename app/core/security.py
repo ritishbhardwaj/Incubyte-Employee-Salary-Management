@@ -3,6 +3,7 @@
 import hashlib
 import hmac
 import secrets
+from urllib.parse import urlparse
 
 import bcrypt
 from fastapi import Request
@@ -35,19 +36,60 @@ def tokens_match(header_token: str | None, cookie_token: str | None) -> bool:
     return hmac.compare_digest(header_token, cookie_token)
 
 
-def origin_is_allowed(origin: str | None, allowed: list[str] | None = None) -> bool:
+def normalize_origin(value: str | None) -> str | None:
+    if not value:
+        return None
+    return value.strip().rstrip("/")
+
+
+def origin_from_referer(referer: str | None) -> str | None:
+    if not referer:
+        return None
+    parsed = urlparse(referer)
+    if parsed.scheme in {"http", "https"} and parsed.netloc:
+        return f"{parsed.scheme}://{parsed.netloc}"
+    return None
+
+
+def effective_origin(request: Request) -> str | None:
+    return normalize_origin(request.headers.get("origin")) or origin_from_referer(
+        request.headers.get("referer")
+    )
+
+
+def public_origin(request: Request) -> str | None:
+    proto = request.headers.get("x-forwarded-proto") or request.url.scheme
+    proto = proto.split(",")[0].strip()
+    host = request.headers.get("x-forwarded-host") or request.headers.get("host")
+    if not host:
+        return None
+    host = host.split(",")[0].strip()
+    return normalize_origin(f"{proto}://{host}")
+
+
+def origin_is_allowed(
+    origin: str | None,
+    allowed: list[str] | None = None,
+    *,
+    same_origin: str | None = None,
+) -> bool:
+    origin = normalize_origin(origin)
     if origin is None:
         return False
     allowed = allowed if allowed is not None else get_settings().origin_list()
-    return origin in allowed
+    allowed_norm = {normalize_origin(item) for item in allowed if item}
+    if origin in allowed_norm:
+        return True
+    same = normalize_origin(same_origin)
+    return same is not None and origin == same
 
 
 def enforce_csrf(request: Request) -> None:
     if request.method in SAFE_METHODS:
         return
     settings = get_settings()
-    origin = request.headers.get("origin")
-    if not origin_is_allowed(origin, settings.origin_list()):
+    origin = effective_origin(request)
+    if not origin_is_allowed(origin, settings.origin_list(), same_origin=public_origin(request)):
         raise ForbiddenError("Invalid or missing Origin")
     header = request.headers.get("x-csrf-token")
     cookie = request.cookies.get(settings.csrf_cookie_name)

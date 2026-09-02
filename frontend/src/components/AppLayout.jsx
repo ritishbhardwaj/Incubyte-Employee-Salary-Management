@@ -1,14 +1,22 @@
 import { AppShell, Button, Group, NavLink, Text } from "@mantine/core";
+import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { api } from "../lib/api";
 import { ORG_NAME } from "../lib/org";
+import ApiError from "./ApiError";
 
 export default function AppLayout({ user, onLogout }) {
   const location = useLocation();
+  const [logoutError, setLogoutError] = useState(null);
 
   async function handleLogout() {
-    await api.logout();
-    onLogout();
+    setLogoutError(null);
+    try {
+      await api.logout();
+      onLogout();
+    } catch (err) {
+      setLogoutError(err);
+    }
   }
 
   return (
@@ -43,6 +51,7 @@ export default function AppLayout({ user, onLogout }) {
         />
       </AppShell.Navbar>
       <AppShell.Main>
+        <ApiError error={logoutError} />
         <Outlet />
       </AppShell.Main>
     </AppShell>

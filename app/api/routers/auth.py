@@ -29,8 +29,9 @@ def _set_session_cookies(response: Response, raw_session: str) -> None:
 
 def _clear_session_cookies(response: Response) -> None:
     settings = get_settings()
-    response.delete_cookie(settings.session_cookie_name, path="/")
-    response.delete_cookie(settings.csrf_cookie_name, path="/")
+    common = {"path": "/", "samesite": "lax", "secure": settings.cookie_secure}
+    response.delete_cookie(settings.session_cookie_name, httponly=True, **common)
+    response.delete_cookie(settings.csrf_cookie_name, httponly=False, **common)
 
 
 @router.post("/login", response_model=UserOut)

@@ -44,7 +44,7 @@ There is no `role` column. Authorization is: **valid session ⇒ full HR access*
 1. **Provision** — seed (or a later login against an already-created user) ensures one bcrypt-hashed row in `users`.
 2. **Authenticate** — `POST /api/v1/auth/login` verifies bcrypt password, inserts a `sessions` row, sets cookies.
 3. **Hold** — browser keeps `iesm_session` (HttpOnly) and `iesm_csrf` (readable). Absolute cap 12 hours. Idle cap 4 hours (`last_seen_at` refreshed on authenticated requests).
-4. **Act** — SPA `fetch` uses `credentials: "include"`. GETs need the session cookie. POST/PATCH/PUT/DELETE also need `Origin` on `ALLOWED_ORIGINS` and `X-CSRF-Token` matching `iesm_csrf`.
+4. **Act** — SPA `fetch` uses `credentials: "include"`. GETs need the session cookie. POST/PATCH/PUT/DELETE also need a same-origin `Origin`/`Referer` (or an origin on `ALLOWED_ORIGINS`) and `X-CSRF-Token` matching `iesm_csrf`.
 5. **End** — `POST /api/v1/auth/logout` sets `revoked_at` and clears both cookies. A revoked or expired session cannot be reused.
 
 Login does **not** require CSRF (there is no prior cookie contract). Logout **does**.

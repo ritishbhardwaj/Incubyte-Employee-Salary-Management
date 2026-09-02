@@ -81,9 +81,11 @@ Pick the existing **IncubyteESM** app. That writes `.fastapicloud/` (gitignored)
 | `DATABASE_SSL_REQUIRE` | `true` |
 | `HR_EMAIL` / `HR_PASSWORD` | Seeded HR account |
 | `ENVIRONMENT` | `production` (Secure cookies on HTTPS) |
-| `ALLOWED_ORIGINS` | Local origins **plus** the Cloud origin, e.g. `https://<your-app>.fastapicloud.dev` |
+| `ALLOWED_ORIGINS` | Local origins **plus** the Cloud origin, e.g. `https://incubyteesm.fastapicloud.dev` |
 
-Without the Cloud origin in `ALLOWED_ORIGINS`, login works but later POST/PATCH (logout, adjust pay, import) get 403.
+Same-origin POSTs from the SPA this process serves are allowed even if the Cloud env omit `ALLOWED_ORIGINS`. Still set the Cloud origin so Vite-style extra hosts and docs stay accurate.
+
+Without a matching origin, login works but later POST/PATCH (logout, adjust pay, import) get 403.
 
 3. Build the frontend **before** every deploy. Cloud does not run `npm run build`. Production refuses to start if `frontend/dist` is missing.
 

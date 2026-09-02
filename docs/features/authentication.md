@@ -46,10 +46,10 @@ Cookie `iesm_csrf`: **not** HttpOnly. The SPA reads it and sends `X-CSRF-Token` 
 
 Unsafe methods (POST, PATCH, PUT, DELETE) after login:
 
-1. `Origin` must be present and listed in `ALLOWED_ORIGINS`.
+1. `Origin` (or, if Origin is absent, the origin of `Referer`) must match this process (same host, including `X-Forwarded-Host` behind FastAPI Cloud) **or** be listed in `ALLOWED_ORIGINS`.
 2. `X-CSRF-Token` must match `iesm_csrf` (constant-time compare).
 
-`http://testserver` is included so pytest TestClient can mutate. Vite origin `http://localhost:5173` must stay on the list. Production must add the FastAPI Cloud origin.
+Same-origin is allowed even when Cloud env never set `ALLOWED_ORIGINS`. That is why local logout worked (`http://127.0.0.1:8000` was on the default list) while [production](https://incubyteesm.fastapicloud.dev/) returned 403 `Invalid or missing Origin` until this check existed. Vite `http://localhost:5173` is a *different* origin from the API and must stay on the list. `http://testserver` is for pytest.
 
 Login itself does not require CSRF (no prior cookie contract). Logout does.
 
@@ -61,11 +61,13 @@ bcrypt via the `bcrypt` package. Login returns 401 for unknown email or bad pass
 
 `fetch(..., { credentials: "include" })`. Login page prefills the demo account. Failed login shows `ApiError` with status and detail. Empty fields fail client-side before the network.
 
+The header **Log out** button (`AppLayout`) POSTs `/api/v1/auth/logout` with the CSRF header, then sets React user state to `null` so routes bounce to `/login`. If that POST fails, the catch keeps local state logged in (the server session is still valid) so the page does not look logged out while the cookie still works. Logout cookie deletes use the same `Path` / `SameSite` / `Secure` / `HttpOnly` flags as login so browsers actually drop them in production.
+
 ## Tests
 
 - Unit: token hash length, revoke, expiry.
-- API: cookies set, 401 without session, logout, missing CSRF, bad Origin.
-- UI: empty email/password validation.
+- API: cookies set, 401 without session, logout revokes and clears cookies, old cookie replay 401, missing CSRF, bad Origin.
+- UI: empty email/password validation; Log out calls `api.logout` then `onLogout`.
 
 ## Out of scope
 
